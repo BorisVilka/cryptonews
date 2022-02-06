@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:text="@{'$'+Utils.intSeparatorDot(String.format(@string/format,coin.getQuote().getUsd().getPrice()))}"
+                android:text="@{'$'+(coin.getQuote().getUsd().getPrice()>1 ? Utils.intSeparatorDot(String.format(@string/format1,coin.getQuote().getUsd().getPrice())) : String.format(@string/format2,coin.getQuote().getUsd().getPrice()))}"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/change_list"

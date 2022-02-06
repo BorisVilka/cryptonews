@@ -37,9 +37,9 @@ public class Utils {
     }
     public static String intSeparatorDot(String s) {
         if(s==null) return "N/A";
-        StringBuilder builder = new StringBuilder(String.format("%.0f",Double.parseDouble(s.replace(',','.'))));
+        StringBuilder builder = new StringBuilder(String.format("%.2f",Double.parseDouble(s.replace(',','.'))));
         builder.reverse();
-        for(int i = 3;i<builder.length();i+=4) builder.insert(i,'.');
+        for(int i = 6;i<builder.length();i+=4) builder.insert(i,'.');
         return builder.reverse().toString();
     }
 

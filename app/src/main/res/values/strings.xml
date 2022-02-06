@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
     <string name="format" translatable="false">%.2f</string>
     <string name="format1" translatable="false">%.0f</string>
+    <string name="format2" translatable="false">%.6f</string>
     <string name="circulating" translatable="false">CS</string>
     <string name="capitalization" translatable="false">MC</string>
 
