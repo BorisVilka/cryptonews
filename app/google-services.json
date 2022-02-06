@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "554868828882",
+    "project_id": "cryptonews-b22be",
+    "storage_bucket": "cryptonews-b22be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554868828882:android:8c493efeda8c007dcb9b0b",
+        "android_client_info": {
+          "package_name": "org.cryptonews.main"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554868828882-4q2urj3oho2lhcp5si65qpap7dfeakof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzfdPFRNSNCZCi9ZwnV_tORelZGAZFNZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554868828882-4q2urj3oho2lhcp5si65qpap7dfeakof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

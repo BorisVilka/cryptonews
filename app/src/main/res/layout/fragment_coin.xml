@@ -1,0 +1,229 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="org.cryptonews.main.Utils"/>
+        <variable
+            name="item"
+            type="org.cryptonews.main.ui.list_utils.ListItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="64dp"
+                        android:src="@drawable/ic_menu_camera"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/first_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:text="@{'$'+String.format(@string/format,item.getCoin().getQuote().getUsd().getPrice())}"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="@+id/logo"
+                        app:layout_constraintStart_toStartOf="@+id/logo"
+                        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+                    <TextView
+                        android:id="@+id/second_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="24dp"
+                        android:visibility="invisible"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/first_price"
+                        app:layout_constraintTop_toBottomOf="@+id/first_price" />
+
+                    <TextView
+                        android:id="@+id/percent_change_1h"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@{item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? @color/green : @color/red}"
+                        android:text="@{(item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? '+' : '-')+String.format(@string/format ,Math.abs(item.getCoin().getQuote().getUsd().getPercent_change1h()))+'%'}"
+                        app:layout_constraintBottom_toBottomOf="@+id/first_price"
+                        app:layout_constraintStart_toEndOf="@+id/first_price" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/price"
+                        android:textSize="20sp" />
+
+                    <androidx.coordinatorlayout.widget.CoordinatorLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/perc_1h" />
+
+                            <TextView
+                                android:id="@+id/textView11"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/perc_1d" />
+
+                            <TextView
+                                android:id="@+id/textView13"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/perc_7d" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/perc_per1h"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{(item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? '+' : '-')+String.format(@string/format ,Math.abs(item.getCoin().getQuote().getUsd().getPercent_change1h()))+'%'}"
+                                android:textColor="@{item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? @color/green : @color/red}" />
+
+                            <TextView
+                                android:id="@+id/perc_per24h"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="@{(item.getCoin().getQuote().getUsd().getPercent_change24h()>0 ? '+' : '-')+String.format(@string/format ,Math.abs(item.getCoin().getQuote().getUsd().getPercent_change24h()))+'%'}"
+                                android:textColor="@{item.getCoin().getQuote().getUsd().getPercent_change24h()>0 ? @color/green : @color/red}" />
+
+                            <TextView
+                                android:id="@+id/perc_per7d"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="@{(item.getCoin().getQuote().getUsd().getPercent_change_7d()>0 ? '+' : '-')+String.format(@string/format ,Math.abs(item.getCoin().getQuote().getUsd().getPercent_change_7d()))+'%'}"
+                                android:textColor="@{item.getCoin().getQuote().getUsd().getPercent_change_7d()>0 ? @color/green : @color/red}" />
+                        </LinearLayout>
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/market_stats"
+                        android:textSize="20sp" />
+
+                    <androidx.coordinatorlayout.widget.CoordinatorLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView14"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/market_cap_full" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/total_supply" />
+
+                            <TextView
+                                android:id="@+id/textView16"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="@string/max_supply" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/cap"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:text="@{'$'+Utils.intSeparator(String.format(@string/format1,item.getCoin().getQuote().getUsd().getMarket_cap()))}" />
+
+                            <TextView
+                                android:id="@+id/supply"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:text="@{item.getCoin().getSymbol()+' '+Utils.intSeparator(item.getCoin().getTotal_supply())}" />
+
+                            <TextView
+                                android:id="@+id/max_supply"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:text="@{item.getCoin().getSymbol()+' '+Utils.intSeparator(item.getCoin().getMax_supply())}" />
+                        </LinearLayout>
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
