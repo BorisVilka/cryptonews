@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.material.tabs.TabLayout;
 
 import org.cryptonews.main.databinding.FragmentRootBinding;
@@ -37,6 +38,8 @@ public class RootFragment extends Fragment {
         binding = FragmentRootBinding.inflate(inflater);
         adapter = new ViewPagerAdapter(this);
         setHasOptionsMenu(true);
+        AdRequest request = new AdRequest.Builder().build();
+        binding.adView5.loadAd(request);
         binding.pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {

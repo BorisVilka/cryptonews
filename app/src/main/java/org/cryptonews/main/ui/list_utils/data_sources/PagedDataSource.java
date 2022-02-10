@@ -1,5 +1,7 @@
 package org.cryptonews.main.ui.list_utils.data_sources;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.paging.PositionalDataSource;
 
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PagedDataSource extends PositionalDataSource<ListItem> {
@@ -28,11 +31,18 @@ public class PagedDataSource extends PositionalDataSource<ListItem> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<ListItem> callback) {
 
-        Retrofit retrofit = MyApp.getClient().getRetrofitInstance();
-        API api = retrofit.create(API.class);
+        API api = MyApp.getClient().getApi();
         Call<Answer> call = api.getWallets(params.requestedLoadSize,Math.max(params.requestedStartPosition,1),MyApp.getUtils().getSortType(),MyApp.getUtils().getSortOrder());
         try {
-           coins = call.execute().body().getCoins();
+            Response<Answer> answerResponse = call.execute();
+            Log.d("TAG",answerResponse.message());
+            if(answerResponse==null) {
+                callback.onResult(new ArrayList<>(), params.requestedStartPosition);
+            }
+            if(answerResponse.body()==null) {
+                callback.onResult(new ArrayList<>(), params.requestedStartPosition);
+            }
+           coins = answerResponse.body().getCoins();
            StringBuilder query = new StringBuilder(coins.get(0).getId()+"");
            for(int i = 1;i<coins.size();i++) query.append(","+coins.get(i).getId());
            Call<Metadata> metadata = api.getMetadata(query.toString());
@@ -47,15 +57,28 @@ public class PagedDataSource extends PositionalDataSource<ListItem> {
 
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<ListItem> callback) {
-        Retrofit retrofit = MyApp.getClient().getRetrofitInstance();
-        API api = retrofit.create(API.class);
+        API api = MyApp.getClient().getApi();
         Call<Answer> call = api.getWallets(params.loadSize,params.startPosition+1,MyApp.getUtils().getSortType(),MyApp.getUtils().getSortOrder());
         try {
-            coins = call.execute().body().getCoins();
+            Response<Answer> answerResponse = call.execute();
+            if(answerResponse==null || answerResponse.body()==null)  {
+                callback.onResult(new ArrayList<>());
+                return;
+            }
+            if(answerResponse.body()==null)  {
+                callback.onResult(new ArrayList<>());
+                return;
+            }
+            coins = answerResponse.body().getCoins();
             StringBuilder query = new StringBuilder(coins.get(0).getId()+"");
             for(int i = 1;i<coins.size();i++) query.append(","+coins.get(i).getId());
             Call<Metadata> metadata = api.getMetadata(query.toString());
-            info = metadata.execute().body().getInfo();
+            Response<Metadata> metadataResponse = metadata.execute();
+            if(metadataResponse==null || metadataResponse.body()==null) {
+                callback.onResult(new ArrayList<>());
+                return;
+            }
+            info = metadataResponse.body().getInfo();
             ans = new ArrayList<>();
             for(Coin i:coins) ans.add(new ListItem(i,info.get(String.valueOf(i.getId()))));
             callback.onResult(ans);

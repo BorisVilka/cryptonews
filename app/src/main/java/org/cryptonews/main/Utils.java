@@ -19,7 +19,7 @@ public class Utils {
 
     public static String getCirculating_supply_string(String s) {
         double circ = Double.parseDouble(s.replace(',','.'));
-        if(context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getBoolean(MyApp.marketInfo,false)) {
+        if(context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getBoolean(MyApp.marketInfo,true)) {
             if(circ>=1_000_000_000) {
                 return String.format("%.1f",((double)circ/1_000_000_000))+"B";
             } else if(circ>=1_000_000) {
@@ -53,18 +53,18 @@ public class Utils {
     }
 
     public static String getSortType() {
-        return context.getResources().getStringArray(R.array.sort_types)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index,0)];
+        return context.getResources().getStringArray(R.array.sort_types)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index,1)];
     }
 
     public static String getSortOrder() {
-        return context.getResources().getStringArray(R.array.sort_order)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index,0)%2];
+        return context.getResources().getStringArray(R.array.sort_order)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index,1)%2];
     }
     public static String getSortTypeFav() {
-        return context.getResources().getStringArray(R.array.sort_types)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index_fav,0)];
+        return context.getResources().getStringArray(R.array.sort_types)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index_fav,1)];
     }
 
     public static String getSortOrderFav() {
-        return context.getResources().getStringArray(R.array.sort_order)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index_fav,0)%2];
+        return context.getResources().getStringArray(R.array.sort_order)[context.getSharedPreferences(MyApp.prefs,Context.MODE_PRIVATE).getInt(MyApp.checked_index_fav,1)%2];
     }
 
 

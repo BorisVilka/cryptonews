@@ -7,9 +7,9 @@
     <application
         android:allowBackup="true"
         android:name="org.cryptonews.main.MyApp"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CryptoNews">
         <activity
@@ -25,7 +25,7 @@
         </activity>
 
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8440126632835087~7053867084"
+            android:value="ca-app-pub-5116638723954405~5074548929"
             />
     </application>
 

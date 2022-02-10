@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
@@ -76,36 +78,42 @@ public class HomeFragment extends Fragment implements DialogReference {
     private PagedList.Config config;
     private SearchView searchView;
     private SearchAdapter adapterSearch;
+    private boolean one;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         preferences = getContext().getSharedPreferences(MyApp.prefs, Context.MODE_PRIVATE);
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
         recyclerView = binding.list;
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         binding.swipe.setColorSchemeColors(Color.BLUE,Color.MAGENTA,Color.GREEN);
         binding.swipe.setOnRefreshListener(() -> {
-            loadList();
+            homeViewModel.iniList(()->{loadList();});
         });
-        binding.switchMarket.setChecked(preferences.getBoolean(MyApp.marketInfo,false));
+        MobileAds.initialize(getContext());
+        AdRequest request = new AdRequest.Builder().build();
+        binding.adView3.loadAd(request);
+        binding.switchMarket.setChecked(preferences.getBoolean(MyApp.marketInfo,true));
         binding.switchMarket.setOnCheckedChangeListener((compoundButton, b) -> {
             Log.d("TAG",b+"");
             preferences.edit().putBoolean(MyApp.marketInfo,b).commit();
             adapter.notifyDataSetChanged();
         });
-        binding.percentItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fragment = new PercentDialog(HomeFragment.this);
-                fragment.show(getActivity().getSupportFragmentManager(),"TAG");
-            }
+        binding.percentItem.setOnClickListener(view -> {
+            fragment = new PercentDialog(HomeFragment.this);
+            fragment.show(getActivity().getSupportFragmentManager(),"TAG");
         });
         View root = binding.getRoot();
         binding.sortItem.setOnClickListener(view -> {
-            fragment = new DialogSort(HomeFragment.this, preferences.getInt(MyApp.checked_index,0));
+            fragment = new DialogSort(HomeFragment.this, preferences.getInt(MyApp.checked_index,1));
             fragment.show(getActivity().getSupportFragmentManager(),"TAG");
         });
         Set<String> set1 = getContext().getSharedPreferences(MyApp.prefs, Context.MODE_PRIVATE).getStringSet(MyApp.favorites,new HashSet<>());
@@ -113,33 +121,47 @@ public class HomeFragment extends Fragment implements DialogReference {
         set1.stream().forEach((s)->{list.add(s);});
         Log.d("TAG",list.toString());
         adapterSearch = new SearchAdapter((item, position)->{
-            AdRequest adRequest = new AdRequest.Builder().build();
-            InterstitialAd.load(getContext(),"ca-app-pub-8440126632835087/6765575550", adRequest,
-                    new InterstitialAdLoadCallback() {
-                        @Override
-                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                            // The mInterstitialAd reference will be null until
-                            // an ad is loaded.
-                            interstitialAd.show(getActivity());
-                        }
+            MyApp.count++;
+            if(MyApp.count%3==0) {
+                AdRequest adRequest = new AdRequest.Builder().build();
+                InterstitialAd.load(getContext(),getString(R.string.ads_id), adRequest,
+                        new InterstitialAdLoadCallback() {
+                            @Override
+                            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                                // The mInterstitialAd reference will be null until
+                                // an ad is loaded.
+                                interstitialAd.show(getActivity());
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Coin",item);
+                                bundle.putInt("Position",position);
+                                Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
+                                        .navigate(R.id.action_nav_home_to_rootFragment,bundle);
+                            }
 
-                        @Override
-                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                            // Handle the error
-                            Log.d("TAG","Error "+loadAdError.getMessage());
+                            @Override
+                            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                // Handle the error
+                                Log.d("TAG","Error "+loadAdError.getMessage());
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Coin",item);
+                                bundle.putInt("Position",position);
+                                Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
+                                        .navigate(R.id.action_nav_home_to_rootFragment,bundle);
+                            }
+                        });
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Coin",item);
+                bundle.putInt("Position",position);
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
+                        .navigate(R.id.action_nav_home_to_rootFragment,bundle);
+            }
 
-                        }
-                    });
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Coin",item);
-            bundle.putInt("Position",position);
-            Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
-                    .navigate(R.id.action_nav_home_to_rootFragment,bundle);
         }, (checked, item, position)-> {
             Log.d("TAG",checked+" "+position+" "+item.getCoin().getId());
             Utils.favoritesMove(item,checked);
         });
-        dataSource = new PagedDataSource();
+        dataSource = homeViewModel.getDataSource();
         callback = new PagedDiffUtilCallback();
         config = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
@@ -148,41 +170,73 @@ public class HomeFragment extends Fragment implements DialogReference {
                 .setInitialLoadSizeHint(10)
                 .build();
         adapter = new PagedAdapter(callback, (item, position)->{
-            AdRequest adRequest = new AdRequest.Builder().build();
-            InterstitialAd.load(getContext(),"ca-app-pub-8440126632835087/6765575550", adRequest,
-                    new InterstitialAdLoadCallback() {
-                        @Override
-                        public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                            // The mInterstitialAd reference will be null until
-                            // an ad is loaded.
-                            interstitialAd.show(getActivity());
-                        }
+            if(one) return;
+           MyApp.count++;
+           one = true;
+           if(MyApp.count%3==0) {
+               AdRequest adRequest = new AdRequest.Builder().build();
+               InterstitialAd.load(getContext(),getString(R.string.ads_id), adRequest,
+                       new InterstitialAdLoadCallback() {
+                           @Override
+                           public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                               // The mInterstitialAd reference will be null until
+                               // an ad is loaded.
+                               one  = false;
+                               interstitialAd.show(getActivity());
+                           }
 
-                        @Override
-                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                            // Handle the error
-                            Log.d("TAG","Error "+loadAdError.getMessage());
-
-                        }
-                    });
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Coin",item);
-            bundle.putInt("Position",position);
-            Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
-            .navigate(R.id.action_nav_home_to_rootFragment,bundle);
+                           @Override
+                           public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                               // Handle the error
+                               one = false;
+                               Log.d("TAG","Error "+loadAdError.getMessage());
+                           }
+                       });
+               Bundle bundle = new Bundle();
+               bundle.putSerializable("Coin",item);
+               bundle.putInt("Position",position);
+               Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
+                       .navigate(R.id.action_nav_home_to_rootFragment,bundle);
+           } else {
+               one = false;
+               Bundle bundle = new Bundle();
+               bundle.putSerializable("Coin",item);
+               bundle.putInt("Position",position);
+               Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
+                       .navigate(R.id.action_nav_home_to_rootFragment,bundle);
+           }
         }, (checked, item, position)-> {
                 Log.d("TAG",checked+" "+position+" "+item.getCoin().getId());
                 Utils.favoritesMove(item,checked);
                 });
         recyclerView.setAdapter(adapter);
-        selectSort(null,0,0,false);
+        select();
+        initList();
         return root;
     }
-
+    private void initList() {
+        if(homeViewModel.getList()==null) {
+            homeViewModel.getCompletable().subscribe(listItems -> {
+                homeViewModel.setList(listItems);
+                loadList();
+            });
+        } else loadList();
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void select() {
+        binding.typeSort.setText(preferences.getString(MyApp.type_sort,"Ранг"));
+        binding.sortTypeIcon.setImageDrawable( preferences.getInt(MyApp.order_sort,0)%2==0
+                ? getContext().getDrawable(R.drawable.ic_baseline_straight_24)
+                : getContext().getDrawable(R.drawable.ic_baseline_south_24));
+        binding.percType.setText(getContext().getResources().getStringArray(R.array.percent_types)[preferences.getInt(MyApp.changes,MyApp.week)]);  binding.typeSort.setText(preferences.getString(MyApp.type_sort,"Ранг"));
+        binding.sortTypeIcon.setImageDrawable( preferences.getInt(MyApp.order_sort,0)%2==0
+                ? getContext().getDrawable(R.drawable.ic_baseline_straight_24)
+                : getContext().getDrawable(R.drawable.ic_baseline_south_24));
+        binding.percType.setText(getContext().getResources().getStringArray(R.array.percent_types)[preferences.getInt(MyApp.changes,MyApp.week)]);
     }
     @Override
     public void selectSort(String type, int order, int ind, boolean b) {
@@ -198,7 +252,7 @@ public class HomeFragment extends Fragment implements DialogReference {
                  ? getContext().getDrawable(R.drawable.ic_baseline_straight_24)
     : getContext().getDrawable(R.drawable.ic_baseline_south_24));
         binding.percType.setText(getContext().getResources().getStringArray(R.array.percent_types)[preferences.getInt(MyApp.changes,MyApp.week)]);
-        loadList();
+        homeViewModel.iniList(()->{loadList();});
     }
 
     @Override
@@ -248,7 +302,7 @@ public class HomeFragment extends Fragment implements DialogReference {
         return super.onOptionsItemSelected(item);
     }
     private void loadList() {
-        Single<PagedList<ListItem>> completable = Single.create((SingleOnSubscribe<PagedList<ListItem>>) emitter -> {
+        /*Single<PagedList<ListItem>> completable = Single.create((SingleOnSubscribe<PagedList<ListItem>>) emitter -> {
             PagedList<ListItem> list = new PagedList.Builder(dataSource,config)
                     .setFetchExecutor(Executors.newSingleThreadExecutor())
                     .setNotifyExecutor(new MyExecutor())
@@ -260,7 +314,10 @@ public class HomeFragment extends Fragment implements DialogReference {
             adapter.submitList(listItems);
             adapter.notifyDataSetChanged();
             binding.swipe.setRefreshing(false);
-        });
+        });*/
+        adapter.submitList(homeViewModel.getList());
+        adapter.notifyDataSetChanged();
+        binding.swipe.setRefreshing(false);
     }
 
     private List<ListItem> searchResult(String key) {
@@ -284,4 +341,5 @@ public class HomeFragment extends Fragment implements DialogReference {
         }
         return new ArrayList<>();
     }
+
 }

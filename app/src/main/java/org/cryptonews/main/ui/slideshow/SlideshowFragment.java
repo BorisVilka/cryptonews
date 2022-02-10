@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.cryptonews.main.StrategyAdapter;
 import org.cryptonews.main.ui.list_utils.Post;
 import org.cryptonews.main.ui.list_utils.adapters.PostAdapter;
 import org.cryptonews.main.Utils;
@@ -41,21 +42,9 @@ public class SlideshowFragment extends Fragment {
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         setHasOptionsMenu(true);
         View root = binding.getRoot();
-        reference = FirebaseDatabase.getInstance().getReference();
         binding.posts.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.posts.addItemDecoration(new DividerItemDecoration(binding.posts.getContext(),DividerItemDecoration.VERTICAL));
-        List<Post> list = new ArrayList<>();
-        reference.child("post").get().addOnCompleteListener(task -> {
-            task.getResult().getChildren().forEach(dataSnapshot -> {
-                Post post = dataSnapshot.getValue(Post.class);
-                list.add(post);
-            });
-            Log.d("TAG",list.size()+"");
-            Collections.sort(list, (post, t1) -> Utils.convertDate(t1.getDate())-Utils.convertDate(post.getDate()));
-            adapter = new PostAdapter(list);
-            if(binding.posts!=null) binding.posts.setAdapter(adapter);
-        });
-
+        binding.posts.setAdapter(new StrategyAdapter());
         return root;
     }
 

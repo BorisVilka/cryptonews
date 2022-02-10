@@ -43,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Log.d("TAG",getTheme().toString());
-        MobileAds.initialize(this, initializationStatus -> {
-            MobileAds.setRequestConfiguration(new RequestConfiguration.Builder().build());
-            AdRequest request = new AdRequest.Builder().build();
-            ((AdView)findViewById(R.id.adView)).loadAd(request);
-        });
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;

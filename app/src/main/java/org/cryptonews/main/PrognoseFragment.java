@@ -1,8 +1,10 @@
 package org.cryptonews.main;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.cryptonews.main.ui.dialogs.ShowDialog;
 import org.cryptonews.main.ui.list_utils.Post;
 import org.cryptonews.main.R;
 import org.cryptonews.main.Utils;
@@ -43,6 +46,11 @@ public class PrognoseFragment extends Fragment {
                              Bundle savedInstanceState) {
        View root = inflater.inflate(R.layout.fragment_prognose,container,false);
        setHasOptionsMenu(true);
+       boolean show = getContext().getSharedPreferences(MyApp.prefs, Context.MODE_PRIVATE).getBoolean(MyApp.dialog,true);
+       if(show) {
+           DialogFragment fragment = new ShowDialog();
+           fragment.show(getChildFragmentManager(),"TAG");
+       }
        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),DividerItemDecoration.VERTICAL));
         reference = FirebaseDatabase.getInstance().getReference();

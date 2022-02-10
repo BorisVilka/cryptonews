@@ -1,8 +1,9 @@
-package org.cryptonews_admin.admin;
+package org.cryptonews.admin;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         title = (EditText) findViewById(R.id.title_admin);
         group = (RadioGroup) findViewById(R.id.radioGroup);
         reference = FirebaseDatabase.getInstance().getReference();
+        ((RadioButton)group.getChildAt(1)).setChecked(true);
         send.setOnClickListener(view -> {
            String category = group.getCheckedRadioButtonId()==R.id.post_admin ? "post" : "prognose";
            DatabaseObject object = new DatabaseObject(text.getText().toString(),title.getText().toString(),new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date()));

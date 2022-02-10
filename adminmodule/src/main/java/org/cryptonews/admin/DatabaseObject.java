@@ -1,4 +1,4 @@
-package org.cryptonews_admin.admin;
+package org.cryptonews.admin;
 
 public class DatabaseObject {
 

@@ -25,8 +25,10 @@ public class MyApp extends MultiDexApplication {
             theme="THEME",
             favorites="FAVORITES",
             language = "LANGUAGE",
+            dialog = "DIALOG",
             changes = "CHANGES";
     public final static int hour = 0, day = 1, week = 2;
+    public static int count;
 
     private static Client client;
     private static Utils utils;
@@ -37,6 +39,7 @@ public class MyApp extends MultiDexApplication {
         AppCompatDelegate.setDefaultNightMode(preferences.getInt(theme,0)==0 ?
                 AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES);
         super.onCreate();
+        count = 0;
         client = new Client();
         utils = new Utils(getApplicationContext());
         Log.d("TAG",getResources().getConfiguration().getLocales().get(0).getDisplayLanguage());

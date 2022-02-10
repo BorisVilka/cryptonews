@@ -14,6 +14,7 @@ public class Client {
 
     private static Retrofit retrofit = null;
     private static OkHttpClient client = null;
+    private static API api = null;
     private static int REQUEST_TIMEOUT = 30;
     private static String BASE_URL = "https://pro-api.coinmarketcap.com";
 
@@ -46,5 +47,10 @@ public class Client {
                 })
                 .build();
         return client;
+    }
+
+    public static API getApi() {
+        if(api==null) api = getRetrofitInstance().create(API.class);
+        return api;
     }
 }
