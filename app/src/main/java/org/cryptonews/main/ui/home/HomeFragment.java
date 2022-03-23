@@ -317,7 +317,7 @@ public class HomeFragment extends Fragment implements DialogReference {
         });*/
         adapter.submitList(homeViewModel.getList());
         adapter.notifyDataSetChanged();
-        binding.swipe.setRefreshing(false);
+        if(binding!=null) binding.swipe.setRefreshing(false);
     }
 
     private List<ListItem> searchResult(String key) {

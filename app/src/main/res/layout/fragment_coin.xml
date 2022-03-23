@@ -13,38 +13,118 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/linear"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/logo"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:id="@+id/group"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="64dp"
-                        android:src="@drawable/ic_menu_camera"
+                        android:layout_marginTop="32dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@id/line">
+
+                        <RadioButton
+                            android:id="@+id/d1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/d1" />
+
+                        <RadioButton
+                            android:id="@+id/w1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/d7" />
+
+                        <RadioButton
+                            android:id="@+id/m1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/d30" />
+
+                        <RadioButton
+                            android:id="@+id/y1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/y1" />
+                    </RadioGroup>
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/line"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTintMode="multiply"
+                        android:minHeight="300dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/price_graph"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:width="40dp"
+                            android:height="20dp"
+                            android:alpha="1"
+                            android:backgroundTintMode="multiply"
+                            android:text="TextView"
+                            android:textColor="?attr/colorOnSecondary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                        <TextView
+                            android:id="@+id/date_graph"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:alpha="1"
+                            android:maxWidth="40dp"
+                            android:text="TextView"
+                            android:textColor="?attr/colorOnSecondary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                    </com.github.mikephil.charting.charts.LineChart>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/first_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="24dp"
                         android:text="@{'$'+String.format(@string/format,item.getCoin().getQuote().getUsd().getPrice())}"
                         android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="@+id/logo"
-                        app:layout_constraintStart_toStartOf="@+id/logo"
-                        app:layout_constraintTop_toBottomOf="@+id/logo" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/second_price"
@@ -52,8 +132,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="24dp"
-                        android:visibility="invisible"
                         android:text="TextView"
+                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/first_price"
                         app:layout_constraintTop_toBottomOf="@+id/first_price" />
@@ -63,15 +143,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:textColor="@{item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? @color/green : @color/red}"
                         android:text="@{(item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? '+' : '-')+String.format(@string/format ,Math.abs(item.getCoin().getQuote().getUsd().getPercent_change1h()))+'%'}"
+                        android:textColor="@{item.getCoin().getQuote().getUsd().getPercent_change1h()>0 ? @color/green : @color/red}"
                         app:layout_constraintBottom_toBottomOf="@+id/first_price"
                         app:layout_constraintStart_toEndOf="@+id/first_price" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:orientation="vertical">
 
@@ -225,5 +305,6 @@
 
             </LinearLayout>
         </ScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

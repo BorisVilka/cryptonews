@@ -17,6 +17,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.material.tabs.TabLayout;
 
 import org.cryptonews.main.databinding.FragmentRootBinding;
+import org.cryptonews.main.ui.coin.CoinFragment;
 import org.cryptonews.main.ui.list_utils.ListItem;
 import org.cryptonews.main.ui.list_utils.adapters.ViewPagerAdapter;
 
@@ -65,6 +66,17 @@ public class RootFragment extends Fragment {
         });
         binding.pager.setAdapter(adapter);
         // Inflate the layout for this fragment
+        adapter.getCoinFragment().listener = new CoinFragment.Listener() {
+            @Override
+            public void enable() {
+                binding.pager.setUserInputEnabled(false);
+            }
+
+            @Override
+            public void disable() {
+                binding.pager.setUserInputEnabled(true);
+            }
+        };
         return binding.getRoot();
     }
 
@@ -92,4 +104,5 @@ public class RootFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+    public FragmentRootBinding getBinding() {return binding;}
 }

@@ -1,5 +1,6 @@
 package org.cryptonews.main;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.Log;
@@ -26,12 +27,14 @@ public class MyApp extends MultiDexApplication {
             favorites="FAVORITES",
             language = "LANGUAGE",
             dialog = "DIALOG",
+            graph_sort = "GRAPH",
             changes = "CHANGES";
     public final static int hour = 0, day = 1, week = 2;
     public static int count;
 
     private static Client client;
     private static Utils utils;
+    public static Context appContext;
 
     @Override
     public void onCreate() {
@@ -39,6 +42,7 @@ public class MyApp extends MultiDexApplication {
         AppCompatDelegate.setDefaultNightMode(preferences.getInt(theme,0)==0 ?
                 AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES);
         super.onCreate();
+        appContext = getApplicationContext();
         count = 0;
         client = new Client();
         utils = new Utils(getApplicationContext());

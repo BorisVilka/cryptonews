@@ -26,4 +26,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return fragments.length;
     }
+
+    public CoinFragment getCoinFragment() {
+        return (CoinFragment) fragments[0];
+    }
 }

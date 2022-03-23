@@ -2,6 +2,7 @@ package org.cryptonews.main.network;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface API {
@@ -17,4 +18,5 @@ public interface API {
     Call<Metadata> getSearchMetadata(@Query("slug") String symbols);
     @GET("/v1/cryptocurrency/quotes/latest")
     Call<Favorites> getFavoritesSearch(@Query("slug") String symbols);
+
 }

@@ -62,7 +62,7 @@ public class PagedAdapter extends PagedListAdapter<ListItem, PagedAdapter.PagedV
         }
         public void bind(ListItem item, int pos) {
             Log.d("TAG",item.getCoin().getSlug());
-            Picasso.get().load(item.getInfo().getLogo()).resize(70,70).into(binding.icon);
+            if(item.getInfo()!=null) Picasso.get().load(item.getInfo().getLogo()).resize(70,70).into(binding.icon);
             binding.setCoin(item.getCoin());
             binding.setPosition(pos);
             binding.checkFavorite.setChecked(Utils.containsFavorites(item));

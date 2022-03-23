@@ -28,7 +28,7 @@ public class Client {
         return retrofit;
     }
 
-    private static OkHttpClient getClient() {
+    public static OkHttpClient getClient() {
         if(client!=null) return client;
         client = new OkHttpClient.Builder()
                 .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
@@ -45,6 +45,23 @@ public class Client {
                         return chain.proceed(builder.build());
                     }
                 })
+                .build();
+        return client;
+    }
+    public static OkHttpClient getClient1() {
+       OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(REQUEST_TIMEOUT,TimeUnit.SECONDS)
+                .writeTimeout(REQUEST_TIMEOUT,TimeUnit.SECONDS)
+               .addInterceptor(new Interceptor() {
+                   @Override
+                   public Response intercept(Chain chain) throws IOException {
+                       Request request = chain.request();
+                       Request.Builder builder = request.newBuilder();
+                       builder.addHeader("accept", "application/json");
+                       return chain.proceed(builder.build());
+                   }
+               })
                 .build();
         return client;
     }

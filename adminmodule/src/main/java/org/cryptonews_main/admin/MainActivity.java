@@ -1,4 +1,4 @@
-package org.cryptonews.admin;
+package org.cryptonews_main.admin;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.cryptonews_admin.admin.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,5 +41,6 @@ public class MainActivity extends AppCompatActivity {
            text.setText("");
            title.setText("");
         });
+
     }
 }

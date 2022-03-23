@@ -160,12 +160,12 @@ public class FavoritesFragment extends Fragment implements DialogReference {
                                 Log.d("TAG","Error "+loadAdError.getMessage());
                             }
                         });
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Coin",item);
-                bundle.putInt("Position",position);
-                Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
-                        .navigate(R.id.action_nav_favorites_to_rootFragment,bundle);
             }
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Coin",item);
+            bundle.putInt("Position",position);
+            Navigation.findNavController(getActivity(),R.id.nav_host_fragment_content_main)
+                    .navigate(R.id.action_nav_favorites_to_rootFragment,bundle);
         }, (checked, item, position)-> {
             Log.d("TAG",item.getCoin().getName()+" "+position);
             Set<String> set = preferences.getStringSet(MyApp.favorites,new HashSet<>());

@@ -5,6 +5,10 @@ import android.util.Log;
 
 import org.cryptonews.main.ui.list_utils.ListItem;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,4 +98,33 @@ public class Utils {
                 .contains(String.valueOf(item.getCoin().getId()));
     }
 
+    public static String getDate(float x, int id) {
+        long d = (long)(x*1_000f);
+        LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(d), ZoneId.systemDefault());
+        String format = "";
+        switch (id) {
+            case 0 :
+                format = "HH:mm";
+                break;
+            default:
+                format = "dd.MM.yyyy";
+                break;
+        }
+        return dateTime.format(DateTimeFormatter.ofPattern(format));
+    }
+
+
+    public static LocalDateTime getTime(int ind) {
+        switch (ind) {
+           case 0 :
+                return LocalDateTime.now().minusDays(1);
+            case 1 :
+                return LocalDateTime.now().minusWeeks(1);
+            case 2 :
+                return LocalDateTime.now().minusMonths(1);
+            case 3 :
+                return LocalDateTime.now().minusYears(1);
+        }
+        return null;
+    }
 }

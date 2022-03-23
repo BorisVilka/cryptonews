@@ -39,9 +39,9 @@
     <string name="perc_7d">% for 7d.</string>
     <string name="rang">Rang</string>
     <string name="price_dialog">Price</string>
-    <string name="h1">1h.</string>
-    <string name="d1">1d.</string>
-    <string name="d7">7d.</string>
+    <string name="h1">1h</string>
+    <string name="d1">1d</string>
+    <string name="d7">7d</string>
     <string name="terms">Terms</string>
     <string name="altcoin_title">Altcoin</string>
     <string name="bitcoin_title">Bitcoin</string>
@@ -98,4 +98,6 @@
     <string name="show_text">"This is solely the opinion of the author. He can be biased and biased. "</string>
     <string name="dont_ask_again">"Don't show next time "</string>
     <string name="ok">Ok</string>
+    <string name="d30">1m</string>
+    <string name="y1">1y</string>
 </resources>

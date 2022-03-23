@@ -11,8 +11,8 @@
     <string name="format2" translatable="false">%.6f</string>
     <string name="circulating" translatable="false">CS</string>
     <string name="capitalization" translatable="false">MC</string>
-    <string name="ads_id" translatable="false">ca-app-pub-5116638723954405/2145133255</string>
-    <string name="banner_id" translatable="false">ca-app-pub-5116638723954405/6168138748</string>
+    <string name="ads_id" translatable="false">ca-app-pub-1145560904060714/7219361929</string>
+    <string name="banner_id" translatable="false">ca-app-pub-1145560904060714/1876408043</string>
 
     <string name="menu_home">Главная</string>
     <string name="menu_gallery">Новости</string>
@@ -77,6 +77,8 @@
     <string name="h1">1ч.</string>
     <string name="d1">1д.</string>
     <string name="d7">7д.</string>
+    <string name="d30"></string>
+    <string name="y1"></string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

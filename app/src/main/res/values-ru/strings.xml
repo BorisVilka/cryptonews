@@ -98,4 +98,6 @@
     <string name="show_text">Это исключительно мнение автора. Он может быть необъективен и предвзят.</string>
     <string name="dont_ask_again">Не показывать в следующий раз</string>
     <string name="ok">Ок</string>
+    <string name="d30">1м</string>
+    <string name="y1">1г</string>
 </resources>
