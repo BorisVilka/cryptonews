@@ -8,6 +8,9 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
 
+import com.yandex.metrica.YandexMetrica;
+import com.yandex.metrica.YandexMetricaConfig;
+
 import org.cryptonews.main.network.Client;
 
 import java.util.Locale;
@@ -29,6 +32,7 @@ public class MyApp extends MultiDexApplication {
             dialog = "DIALOG",
             graph_sort = "GRAPH",
             changes = "CHANGES";
+    private final String API_key = "2a7bf394-1c45-47c5-be82-1384a03636f9";
     public final static int hour = 0, day = 1, week = 2;
     public static int count;
 
@@ -42,6 +46,9 @@ public class MyApp extends MultiDexApplication {
         AppCompatDelegate.setDefaultNightMode(preferences.getInt(theme,0)==0 ?
                 AppCompatDelegate.MODE_NIGHT_NO : AppCompatDelegate.MODE_NIGHT_YES);
         super.onCreate();
+        YandexMetricaConfig config = YandexMetricaConfig.newConfigBuilder(API_key).build();
+        YandexMetrica.activate(getApplicationContext(), config);
+        YandexMetrica.enableActivityAutoTracking(this);
         appContext = getApplicationContext();
         count = 0;
         client = new Client();
